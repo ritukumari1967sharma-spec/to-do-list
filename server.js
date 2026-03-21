@@ -9,6 +9,9 @@ app.get('/' , (req,res) =>{
     res.sendFile(filepath);
 })
 
+app.post('/add' , (req,res) =>{
+    res.send("add");
+})
 app.get('/c' , (req,res) =>{
     res.sendFile(savepath);
 })
