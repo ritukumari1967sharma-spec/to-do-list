@@ -3,9 +3,14 @@ const app = express();
 const path = require("path");
 
 const filepath = path.join(__dirname, "index.html");
+const savepath = path.join(__dirname, "contact.html");
 
 app.get('/' , (req,res) =>{
     res.sendFile(filepath);
+})
+
+app.get('/c' , (req,res) =>{
+    res.sendFile(savepath);
 })
 
 
