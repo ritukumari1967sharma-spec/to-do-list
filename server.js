@@ -8,6 +8,9 @@ app.get('/' , (req,res) =>{
     res.sendFile(filepath);
 })
 
+app.post('/add' , (req,res) =>{
+    res.send("add");
+})
 
 app.listen(8000,() => {
     console.log(`listen at http://localhost:${8000}`);
