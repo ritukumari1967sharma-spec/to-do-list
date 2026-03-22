@@ -34,6 +34,12 @@ app.post("/tasks", (req, res) => {
   };
 
   todos.push(newTask);
+app.post('/add' , (req,res) =>{
+    res.send("add");
+})
+app.get('/c' , (req,res) =>{
+    res.sendFile(savepath);
+})
 
   res.status(201).json(newTask);
 });
