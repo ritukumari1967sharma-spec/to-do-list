@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo App</title>
+</head>
+<body>
+  <h1>Todo App</h1>
+
+  <input type="text" id="task_title" placeholder="Enter task">
+  <button onclick="newTask()">Add Task</button>
+
+  <button onclick="loadData()">Load Data</button>
+
+  <div id="result"></div>
+
+<script>
+const API_URL = "http://localhost:4040/task";
+
+// ✅ Add Task
+const newTask = async () => {
+  const input = document.getElementById("task_title");
+  const value = input.value.trim();
+
+  if (!value) {
+    alert("Task cannot be empty");
+    return;
+  }
+
+  await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      task_title: value,
+      status: "Not Done"
+    })
+  });
+
+  input.value = "";
+  loadData();
+};
+
+// ✅ Delete
+const deleteData = async (id) => {
+  await fetch(`${API_URL}/${id}`, {
+    method: "DELETE"
+  });
+  loadData();
+};
+
+// ✅ Update
+const updateData = async (id, newTitle) => {
+  if (!newTitle.trim()) {
+    alert("Task cannot be empty");
+    return;
+  }
+
+  await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      task_title: newTitle
+    })
+  });
+
+  loadData();
+};
+
+// ✅ Load Data
+const loadData = async () => {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+
+  const res = await fetch(API_URL);
+  const data = await res.json();
+
+  data.forEach((task) => {
+    const container = document.createElement("div");
+
+    const title = document.createElement("p");
+    title.innerText = `Task: ${task.task_title}`;
+
+    const status = document.createElement("p");
+    status.innerText = `Status: ${task.status}`;
+
+    const input = document.createElement("input");
+    input.value = task.task_title;
+
+    const updateBtn = document.createElement("button");
+    updateBtn.innerText = "Update";
+    updateBtn.onclick = () => updateData(task._id, input.value);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "Delete";
+    deleteBtn.onclick = () => deleteData(task._id);
+
+    container.appendChild(title);
+    container.appendChild(status);
+    container.appendChild(input);
+    container.appendChild(updateBtn);
+    container.appendChild(deleteBtn);
+
+    resultDiv.appendChild(container);
+  });
+};
+</script>
+
+</body>
+</html>
